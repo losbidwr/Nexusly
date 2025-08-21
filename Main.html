@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nexusly — A Better Roblox Player</title>
+  <meta name="description" content="Nexusly: Faster, smoother, and more customizable Roblox experience with Player, Developer, and Streamer modes. Optimized for speed and stability." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>⚡</text></svg>">
+  <style>
+    :root{
+      --bg: #0a0b10;
+      --card: rgba(255,255,255,0.06);
+      --muted: #aeb2c1;
+      --primary: #7c5cff; /* purple */
+      --accent: #00f0ff;  /* cyan */
+      --glow: 0 0 30px rgba(124,92,255,.45), 0 0 60px rgba(0,240,255,.3);
+      --radius: 18px;
+      --add: #4ade80;
+      --remove: #f87171;
+    }
+    *{box-sizing:border-box}
+    /* === FIX #1: ADDED SMOOTH SCROLLING FOR ANCHOR LINKS === */
+    html{scroll-behavior: smooth;}
+    html,body{height:100%}
+    body{
+      margin:0; color:#e8ebf7; background: radial-gradient(1200px 800px at 85% -10%, rgba(124,92,255,.20), transparent 50%),
+      radial-gradient(1000px 600px at -10% 20%, rgba(0,240,255,.16), transparent 50%), var(--bg);
+      background-attachment: fixed;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      overflow-x:hidden;
+    }
+    .container{width:min(1120px, 92%); margin-inline:auto}
+    .navbar{position:sticky; top:0; backdrop-filter: blur(10px); background: rgba(10,11,16,.6); border-bottom:1px solid rgba(255,255,255,.06); z-index:50}
+    .nav-inner{display:flex; align-items:center; justify-content:space-between; padding:16px 0}
+    .brand{display:flex; gap:12px; align-items:center; font-weight:800; letter-spacing:.3px}
+    .logo{width:36px; height:36px; display:grid; place-items:center; border-radius:10px; background:linear-gradient(145deg, var(--primary), var(--accent)); box-shadow: var(--glow)}
+    .logo span{font-size:20px}
+    .brand b{font-size:1.1rem}.nav-actions{display:flex; gap:10px; align-items:center}
+    .btn{cursor:pointer; border:none; border-radius:14px; padding:10px 16px; font-weight:600; letter-spacing:.2px; transition: all .2s ease;}
+    .btn-primary{background:linear-gradient(135deg, var(--primary), #5e34ff); color:white; box-shadow: var(--glow)}
+    .btn-primary:hover{transform: translateY(-1px) scale(1.01)}
+    .btn-ghost{background:transparent; color:#e8ebf7; border:1px solid rgba(255,255,255,.12)}
+    .btn-ghost:hover{background:rgba(255,255,255,.06)}
+
+    .hero{position:relative; padding:72px 0 36px}
+    .hero h1{font-size:clamp(2.2rem, 5vw, 4rem); line-height:1.05; margin:0 0 14px; font-weight:900; letter-spacing:-.02em}
+    .hero p{margin:0; font-size:clamp(1rem, 2.2vw, 1.25rem); color:var(--muted)}
+
+    .hero-card{margin-top:28px; background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04)); border:1px solid rgba(255,255,255,.12); border-radius:var(--radius); padding:22px; position:relative; overflow:hidden}
+    .hero-card::after{content:""; position:absolute; inset:-2px; border-radius:inherit; padding:2px; background:linear-gradient(135deg, rgba(124,92,255,.7), rgba(0,240,255,.7)); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude;}
+
+    .tagline{display:flex; gap:10px; flex-wrap:wrap; margin-top:16px}
+    .chip{padding:8px 12px; border-radius:999px; border:1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.06); font-size:.9rem}
+
+    /* === FIX #2: MADE BUTTONS CLICKABLE BY GIVING THEM A HIGHER LAYER === */
+    .actions{
+        display:flex;
+        gap:10px;
+        margin-top:18px;
+        flex-wrap:wrap;
+        position: relative; /* Add this */
+        z-index: 2; /* Add this to ensure it's above the border effect */
+    }
+    .subtle{color:var(--muted); font-size:.95rem}
+
+    .marquee{margin-top:24px; overflow:hidden; border:1px solid rgba(255,255,255,.1); border-radius:14px; background:rgba(255,255,255,.04)}
+    .marquee-track{display:flex; gap:28px; padding:12px 16px; white-space:nowrap; animation:scroll 22s linear infinite}
+    .pill{border:1px dashed rgba(255,255,255,.3); padding:8px 12px; border-radius:999px; font-weight:600; font-size:.95rem}
+    @keyframes scroll{from{transform:translateX(0)} to{transform:translateX(-50%)}}
+
+    .tabs{margin-top:42px; display:flex; gap:10px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:14px; padding:6px}
+    .tab{flex:1; padding:12px 14px; text-align:center; border-radius:10px; cursor:pointer; font-weight:700; letter-spacing:.2px; color:#000000}
+    .tab[data-active="true"]{background:linear-gradient(145deg, rgba(124,92,255,.3), rgba(0,240,255,.25)); color:white; box-shadow: var(--glow)}
+
+    .panel{display:none; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:16px; margin-top:18px}
+    .panel.active{display:grid}
+
+    .card{background:var(--card); border:1px solid rgba(255,255,255,.12); border-radius:var(--radius); padding:18px; position:relative; overflow:hidden}
+    .card h3{margin:0 0 6px; font-size:1.05rem}
+    .card p{margin:0; color:var(--muted); font-size:.95rem}
+    .badge{position:absolute; top:14px; right:14px; font-size:.8rem; padding:6px 10px; border-radius:999px; background:rgba(124,92,255,.2); border:1px solid rgba(124,92,255,.4)}
+
+    .grid-2{display:grid; grid-template-columns:1.1fr .9fr; gap:22px; margin-top:26px}
+    .glass{background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04)); border:1px solid rgba(255,255,255,.12); border-radius:var(--radius); padding:18px}
+
+    .countdown{display:flex; gap:16px; flex-wrap:wrap; align-items:center}
+    .timebox{min-width:88px; text-align:center; padding:12px 10px; border-radius:14px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12)}
+    .timebox b{font-size:1.4rem; display:block}
+    .timebox span{font-size:.8rem; color:var(--muted)}
+
+    .cta-banner{margin-top:18px; display:flex; gap:12px; flex-wrap:wrap}
+
+    .footer{
+      margin: 44px 0 24px;
+      color: var(--muted);
+      font-size: .9rem;
+      text-align: center;
+    }
+    .footer a{color:#d7dbff}
+
+    /* entrance animation */
+    .reveal{opacity:0; transform:translateY(12px); transition: all .6s ease}
+    .reveal.in{opacity:1; transform:none}
+
+    /* tiny responsive touch ups */
+    @media (max-width: 860px){
+      .grid-2{grid-template-columns:1fr;}
+    }
+
+    /* === PATCH NOTES STYLES === */
+    .patch-nav {
+      position: sticky;
+      top: 0;
+      padding: 14px 0;
+      backdrop-filter: blur(10px);
+      background: rgba(10,11,16,.6);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      z-index: 100;
+    }
+    .patch-nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .patch-nav .back-link {
+      display: grid;
+      place-items: center;
+      width: 40px;
+      height: 40px;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: white;
+      text-decoration: none;
+      border-radius: 12px;
+      transition: background .2s ease;
+    }
+    .patch-nav .back-link:hover {
+      background: rgba(255,255,255,.08);
+    }
+    .patch-nav .title {
+      font-weight: 600;
+      letter-spacing: .2px;
+      text-align: right;
+    }
+    .patch-logs {
+      padding: 32px 0;
+    }
+    .patch-container{width:min(960px, 92%); margin-inline:auto}
+    .log-group {
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: var(--radius);
+      padding: 22px 26px;
+      margin-bottom: 24px;
+    }
+    .log-group h3 {
+      margin: 0 0 16px;
+      font-size: 1.1rem;
+      color: var(--muted);
+      border-bottom: 1px solid rgba(255,255,255,.1);
+      padding-bottom: 12px;
+    }
+    .log-group ul {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+    }
+    .log-group li {
+      padding-left: 24px;
+      position: relative;
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+    .log-group li::before {
+      position: absolute;
+      left: 0;
+      font-weight: 700;
+    }
+    .log-group li.add::before {
+      content: "+";
+      color: var(--add);
+    }
+    .log-group li.remove::before {
+      content: "-";
+      color: var(--remove);
+    }
+    .log-group p.note {
+      color: var(--muted);
+      margin-top: 16px;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="main-content">
+    <header class="navbar">
+      <div class="container nav-inner">
+        <div class="brand">
+          <div class="logo" aria-hidden="true"><span>N</span></div>
+          <b>Nexusly</b>
+          <span class="chip" style="margin-left:6px">Beta</span>
+        </div>
+        <div class="nav-actions">
+          <a class="btn btn-ghost" href="#modes">Modes</a>
+          <a class="btn btn-ghost" href="#release">Release</a>
+          <a class="btn btn-primary" target="_blank" rel="noopener" href="https://discord.gg/pKR2dME5JJ">Join Discord</a>
+        </div>
+      </div>
+    </header>
+    <main class="container">
+      <section class="hero">
+        <h1 class="reveal">A Better Roblox Player — supercharged.</h1>
+        <p class="reveal" style="transition-delay:.05s">Nexusly brings extreme UI, quicker installs, analytics, streamer tools, and more — all optimized for speed, stability, and a smoother experience beyond simple cache clearing.</p><div class="hero-card reveal" style="transition-delay:.1s">
+      <div class="tagline">
+        <span class="chip">⚡ Ping & FPS tweaks</span>
+        <span class="chip">🧩 Faster model/plugin installs</span>
+        <span class="chip">📊 Game & group analytics</span>
+        <span class="chip">🎥 Streamer utilities</span>
+        <span class="chip">💬 Roblox + Discord chat</span>
+        <span class="chip">🛠️ Easier settings & fixes</span>
+      </div>
+      <div class="actions">
+        <a class="btn btn-primary" target="_blank" rel="noopener" href="https://discord.gg/pKR2dME5JJ">Get Early News on Discord</a>
+        <a class="btn btn-ghost" href="#modes">Many Mods!</a>
+      </div>
+      <div class="marquee" aria-hidden="true">
+        <div class="marquee-track">
+          <div class="pill">Extreme UI</div>
+          <div class="pill">Daily/Weekly Updates</div>
+          <div class="pill">Unlimited Account Switcher</div>
+          <div class="pill">Cheapest gift card finder</div>
+          <div class="pill">Marketplace Shortcuts</div>
+          <div class="pill">DevEx Access</div>
+          <div class="pill">Forum Hub</div>
+          <div class="pill">Custom Animations</div>
+          <div class="pill">Crash Guard</div>
+          <div class="pill">Latency Aid</div>
+          <div class="pill">Extreme UI</div>
+          <div class="pill">Daily/Weekly Updates</div>
+          <div class="pill">Unlimited Account Switcher</div>
+          <div class="pill">Cheapest gift card finder</div>
+          <div class="pill">Marketplace Shortcuts</div>
+          <div class="pill">DevEx Access</div>
+          <div class="pill">Forum Hub</div>
+          <div class="pill">Custom Animations</div>
+          <div class="pill">Crash Guard</div>
+          <div class="pill">Latency Aid</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="modes" class="reveal" style="margin-top:14px">
+    <div class="tabs" role="tablist" aria-label="Nexusly modes">
+      <button class="tab" data-tab="player" role="tab" aria-selected="true">Player Mode</button>
+      <button class="tab" data-tab="developer" role="tab" aria-selected="false">Developer Mode</button>
+      <button class="tab" data-tab="streamer" role="tab" aria-selected="false">Streamer Mode</button>
+    </div>
+
+    <div class="panel active" id="panel-player" role="tabpanel" aria-labelledby="player">
+      <article class="card"><span class="badge">UI</span><h3>Extreme, animated UI</h3><p>Clean, modern visuals with custom animations and intuitive controls.</p></article>
+      <article class="card"><span class="badge">Performance</span><h3>Ping/FPS Boost</h3><p>Smart, configurable options to help reduce latency and smooth frames.</p></article>
+      <article class="card"><span class="badge">Chat</span><h3>Roblox + Discord chat</h3><p>Built-in default Roblox chat and integrated Discord chat for quick comms.</p></article>
+      <article class="card"><span class="badge">Updates</span><h3>Weekly Updates</h3><p>Fast iteration with visible changelogs and opt-in experimental features.</p></article>
+      <article class="card"><span class="badge">Accounts</span><h3>Account switcher</h3><p>Swap between accounts effortlessly with secure profiles.</p></article>
+      <article class="card"><span class="badge">Tools</span><h3>Cheapest card finder</h3><p>Scan deals and compare common retailers in one place.</p></article>
+      <article class="card"><span class="badge">Fix</span><h3>Better settings & repair</h3><p>Quick access to fixes and sensible defaults for a stable experience.</p></article>
+      <article class="card"><span class="badge">Control</span><h3>Easier to modify/use</h3><p>More toggles, clearer controls, and thoughtful presets.</p></article>
+    </div>
+
+    <div class="panel" id="panel-developer" role="tabpanel" aria-labelledby="developer">
+      <article class="card"><span class="badge">Speed</span><h3>Models/plugins</h3><p>Reduce clicks and friction when adding assets to your projects. Easier, quick and safer!</p></article>
+      <article class="card"><span class="badge">Insights</span><h3>Custom analytics</h3><p>Metrics for games & groups, tailored to what devs actually track.</p></article>
+      <article class="card"><span class="badge">Access</span><h3>Marketplace/DevEx</h3><p>Direct routes to marketplace listings, DevEx, docs, and forums.</p></article>
+      <article class="card"><span class="badge">Workflow</span><h3>Team tools</h3><p>Quick links, role-aware shortcuts, and version-aware installs all team-friendly.</p></article>
+    </div>
+
+    <div class="panel" id="panel-streamer" role="tabpanel" aria-labelledby="streamer">
+      <article class="card"><span class="badge">Live</span><h3>Streamer-first utilities</h3><p>Dedicated overlays & helpers for live streams.</p></article>
+      <article class="card"><span class="badge">Roadmap</span><h3>Secret features (for now)</h3><p>Some tools are under wraps — join the Discord for reveals.</p></article>
+      <article class="card"><span class="badge">Sync</span><h3>Stable performance on-air</h3><p>Optimizations focused on smooth capture and fewer hiccups.</p></article>
+    </div>
+  </section>
+
+  <section id="release" class="grid-2 reveal">
+    <div class="glass">
+      <h2 style="margin-top:0">📅 Planned release</h2>
+      <p class="subtle">Target window: <b>September 3–6</b>. Join the Discord to be notified the minute builds go live.</p>
+      <div class="countdown" id="countdown" aria-live="polite">
+        <div class="timebox"><b id="d">--</b><span>Days</span></div>
+        <div class="timebox"><b id="h">--</b><span>Hours</span></div>
+        <div class="timebox"><b id="m">--</b><span>Minutes</span></div>
+        <div class="timebox"><b id="s">--</b><span>Seconds</span></div>
+      </div>
+      <div class="cta-banner">
+        <a class="btn btn-primary" target="_blank" rel="noopener" href="https://discord.gg/pKR2dME5JJ">Join the Discord</a>
+        <a id="show-patch-notes-btn" class="btn btn-ghost" href="#">Release patch notes</a>
+      </div>
+    </div>
+    <div class="glass">
+      <h2 style="margin-top:0">Why Nexusly?</h2>
+      <p class="subtle">Because you deserve more than a basic player. Nexusly is tuned for fast launches, stable sessions, and fewer interruptions — whether you’re grinding, building, or going live.</p>
+      <ul>
+        <li>Designed for <b>players</b>, <b>developers</b>, and <b>streamers</b>.</li>
+        <li>Focus on <b>speed</b> and <b>stability</b> — not just cache clearing.</li>
+        <li>Thoughtful UX with glowing, modern visuals.</li>
+        <li>Frequent updates and transparent roadmap.</li>
+      </ul>
+    </div>
+  </section>
+ </main>
+</div>
+
+<div id="patch-notes-page" style="display: none;">
+    <header class="patch-nav">
+    <div class="patch-container patch-nav-inner">
+      <a href="#" id="back-to-main-btn" class="back-link" aria-label="Return to homepage">&larr;</a>
+      <span class="title">App still in dev expect delays : 🔴</span>
+    </div>
+  </header>
+
+  <main class="patch-container">
+    <section class="patch-logs">
+      <div class="log-group">
+        <h3>Initial Development</h3>
+        <ul>
+          <li class="add">Started Project Nexusly</li>
+          <li class="add">UI in development</li>
+          <li class="add">Added Automated Optimizations (C++)</li>
+          <li class="add">Testing Custom-Made Like Roblox UI/APP</li>
+          <li class="add">Made it compatible [not fully sadly] with all Windows Version Except 10 ></li>
+        </ul>
+      </div>
+
+      <div class="log-group">
+        <h3>Nexusly — 8/13/25, 9:59 AM</h3>
+        <ul>
+          <li class="add">Added Premium</li>
+          <li class="remove">Website in development (many errors, i didn’t master html)</li>
+          <li class="add">Made a custom Roblox like UI (Still crapy)</li>
+          <li class="remove">Features like Account-Switcher/Manager got capped up to 3 accounts on freemium version</li>
+          <li class="add">Added a feature which allows you to find the cheapest robux giftcard (Premium/Freemium)</li>
+          <li class="add">Added Discord to app (🟠 Still in Dev cuz of errors 🟠)</li>
+          <li class="add">Added Discord Rich Presence with your local name.</li>
+          <li class="add">Added Custom Cursor, Shiftlock, and much more via settings</li>
+          <li class="remove">Delayed app to September 1-2 cuz of irl things i gotta do</li>
+          <li class="add">Upgraded Optimization by +12%</li>
+          <li class="add">Added Ping/Latency Optimization with the FPS Optimization.</li>
+          <li class="add">Added Integrated Streaming stuff related which helps you record between 720p - 1440p and 24-60 FPS and reduced recording lag also added Button/Features that shows up in the second monitor like: Quick Send Private Server Link To Chat/Group, Hide Roblox for stream (with integrated cool roblox logo animation which ofc u can preview, replace, turn off)</li>
+        </ul>
+        <p class="note">More will be added soon 🙋‍♂️<br>thanks for the support although no ones here rn 😭</p>
+      </div>
+
+      <div class="log-group">
+        <h3>Nexusly — 8/13/25, 2:56 PM</h3>
+        <ul>
+          <li class="add">Added too much streaming features</li>
+          <li class="remove">Streaming/Recording is way laggier future updates will prevent this. (the reason is because of way too many features while recording/streaming and keeping code organised to groups into groups was hard)</li>
+          <li class="add">Focused on ways to optimize ping, found a [buggy] way and the average boost is around 16%-23%</li>
+          <li class="remove">Added a feature which allows people to upload scripts &lt;C / Py / ahk&gt; and this can be used as Macro’s, Afk farming, Auto Farming and much more but because of high security risk and people might be puttings lots of shit in these scripts this feature will be delayed.</li>
+          <li class="add">Added 3 themes [Glass U.I] [Glass U.I (but it’s not glass it’s blurry)] [Colors U.I which can be customized]</li>
+          <li class="add">Added a rat-proof protocol which makes you safer from downloaded malwares.</li>
+          <li class="add">VERY IMPORTANT (UPDATES WILL BE DELAYED TO ENHANCE ANTI MALWARES, REVERSE ENGINEERS AND MUCH MORE)</li>
+          <li class="add">IT MIGHT BE MORE DELAYED BECAUSE: I am releasing a mobile version for non-rooted/rooted devices [Non-rooted will come out first], for kids this basically means in your mobile device you will be able to unlock your fps, remove textures/modify and also boost your fps.</li>
+        </ul>
+        <p class="note">More will be added soon 🙋‍♂️</p>
+      </div>
+
+      <div class="log-group">
+        <h3>Nexusly — 8/13/25, 3:08 PM</h3>
+        <ul>
+          <li class="add">Added smooth animation when app is loading.</li>
+          <li class="add">Added smooth ease in delayed drag.</li>
+          <li class="add">Ping optimizer is more stable.</li>
+          <li class="add">Renamed auto cheapest giftcard finder to BuxFinder and refined it, using freemium version you get 1-5 free uses each month. [Pro users get 20 per month, Premium users get ∞ uses.]</li>
+          <li class="add">Optimized App and recording</li>
+          <li class="remove">Streaming is still not stable, but now it’s fully done with many features and you can set it up easily yet like a professional software you can now stream directly with one click. We support [Yt, Twitch], next update Kick will be supported.</li>
+        </ul>
+        <p class="note">Next update will take time because of fixing, refining and adding features MOSTLY security related.</p>
+      </div>
+        
+      <div class="log-group">
+        <h3>Nexusly — 8/17/25, 3:54 PM</h3>
+        <ul>
+            <li class="add">Win 11 Home/Pro/Family are all fully supported.</li>
+        </ul>
+      </div>
+
+      <div class="log-group">
+        <h3>Nexusly — 8/17/25, 4:14 PM</h3>
+        <ul>
+          <li class="add">Added 3 versions of app which are: Dev, Player, Streamer</li>
+          <li class="add">Streaming mode is one of the most amazing things you will see 😉</li>
+          <li class="add">Dev mod has a dev layout with a marketplace button, customized UI to see your game’s custom-made analytics, and much more.</li>
+          <li class="add">BuxFinder has been refined to the best version I could’ve possibly made.</li>
+          <li class="add">The upload script is fully made and only supports 2 libraries which are libuiohook and iostream (cpp is the only supported one for the MOMENT).</li>
+          <li class="add">FPS optimizations may reach up to 50% boost in frames, ping also MAY reach up to 15-29%. (They are all in one group aka one button).</li>
+          <li class="add">Streams normally should be 4% faster than OBS, in some rare cases it could also be 10%. I’m working on stabilizing it. 😭👍</li>
+          <li class="add">Yt, Twitch, Kick are all fully supported.</li>
+          <li class="add">Glass U.I has been fully fixed.</li>
+          <li class="add">Added an amazing grid background.</li>
+          <li class="add">Streaming is now 47.6% more stable.</li>
+          <li class="add">Removed channel Suggestions and added it to the app (Suggestions with hate/swears will automatically be discarded with Llama).</li>
+          <li class="add">App delayed till the first weekend of September because of high school.</li>
+          <li class="add">Added custom UI pop-ups in the built-in Discord for friend messages or server mentions, fully customizable.</li>
+          <li class="add">Everything is stable (IT SHOULD NORMALLY).</li>
+          <li class="add">(DEV related) Added a feature in Dev mode to view and install plugins/models directly from the app. It also blacklists plugins/models with known backdoors using multiple trusted APIs.</li>
+        </ul>
+        <p class="note">NOTE: The rat proof protocol (R.P.P) has been really hard. I've had to learn reverse engineering... I will find a way soon. I won't say why since there are maybe some r.e. in this server but just trust me in general.</p>
+      </div>
+    </section>
+  </main>
+</div>
+
+<footer class="footer reveal">
+  <p>© <span id="year"></span> Nexusly. All rights reserved. <br/>Nexusly is an independent project and is <b>not affiliated with or endorsed by Roblox Corporation</b>. Roblox is a trademark of Roblox Corporation.</p>
+</footer>
+
+<script>
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('in') })
+    }, {threshold: .12});
+    document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+    const tabs = document.querySelectorAll('.tab');
+    const panels = {
+      player: document.getElementById('panel-player'),
+      developer: document.getElementById('panel-developer'),
+      streamer: document.getElementById('panel-streamer')
+    };
+    tabs.forEach(t => t.addEventListener('click', ()=>{
+      tabs.forEach(x=>x.setAttribute('aria-selected','false')); t.setAttribute('aria-selected','true');
+      tabs.forEach(x=>x.dataset.active = 'false'); t.dataset.active = 'true';
+      Object.values(panels).forEach(p=>p.classList.remove('active'));
+      const key = t.dataset.tab; panels[key].classList.add('active');
+      history.replaceState(null, '', `#${key}`);
+    }));
+
+    
+    const hash = location.hash.replace('#','');
+    if(['player','developer','streamer'].includes(hash)){
+      document.querySelector(`.tab[data-tab="${hash}"]`).click();
+    } else if (document.querySelector('.tab[data-tab="player"]')) {
+      document.querySelector('.tab[data-tab="player"]').dataset.active = 'true';
+    }
+  
+    const target = new Date('2025-09-03T00:00:00');
+    const els = { d: document.getElementById('d'), h: document.getElementById('h'), m: document.getElementById('m'), s: document.getElementById('s') };
+    function tick(){
+      const now = new Date();
+      let diff = Math.max(0, target - now);
+      const d = Math.floor(diff / (1000*60*60*24)); diff -= d*24*60*60*1000;
+      const h = Math.floor(diff / (1000*60*60)); diff -= h*60*60*1000;
+      const m = Math.floor(diff / (1000*60)); diff -= m*60*1000;
+      const s = Math.floor(diff / 1000);
+      els.d.textContent = d; els.h.textContent = h.toString().padStart(2,'0'); els.m.textContent = m.toString().padStart(2,'0'); els.s.textContent = s.toString().padStart(2,'0');
+    }
+    if (els.d) {
+        tick();
+        setInterval(tick, 1000);
+    }
+
+    
+    document.getElementById('year').textContent = new Date().getFullYear();
+  
+    const mainContent = document.getElementById('main-content');
+    const patchNotesPage = document.getElementById('patch-notes-page');
+    const showPatchNotesBtn = document.getElementById('show-patch-notes-btn');
+    const backToMainBtn = document.getElementById('back-to-main-btn');
+    const mainNavLinks = document.querySelectorAll('.nav-actions a[href^="#"]');
+
+    function showMainPage() {
+        patchNotesPage.style.display = 'none';
+        mainContent.style.display = 'block';
+        window.scrollTo(0, 0);
+    }
+
+    function showPatchNotes() {
+        mainContent.style.display = 'none';
+        patchNotesPage.style.display = 'block';
+        window.scrollTo(0, 0);
+    }
+
+    showPatchNotesBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        showPatchNotes();
+    });
+
+    backToMainBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        showMainPage();
+    });
+  //before yall skids start skidding ts ain’t a.i gen or smthing i just fixed it over 21 times and it was messy and i only put one html file to keep things as easy as ts twin 👀
+    mainNavLinks.forEach(link => {
+      link.addEventListener('click', (e) => 
+            e.preventDefault(); 
+            showMainPage()
+            setTimeout(() => {
+                const targetElement = document.querySelector(link.getAttribute('href'));
+                if (targetElement) {
+                    targetElement.scrollIntoView(); 
+                }
+            }, 50);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
