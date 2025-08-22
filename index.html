@@ -22,7 +22,6 @@
       --remove: #f87171;
     }
     *{box-sizing:border-box}
-    /* === FIX #1: ADDED SMOOTH SCROLLING FOR ANCHOR LINKS === */
     html{scroll-behavior: smooth;}
     html,body{height:100%}
     body{
@@ -45,6 +44,10 @@
     .btn-ghost{background:transparent; color:#e8ebf7; border:1px solid rgba(255,255,255,.12)}
     .btn-ghost:hover{background:rgba(255,255,255,.06)}
 
+    section[id] {
+      scroll-margin-top: 80px;
+    }
+
     .hero{position:relative; padding:72px 0 36px}
     .hero h1{font-size:clamp(2.2rem, 5vw, 4rem); line-height:1.05; margin:0 0 14px; font-weight:900; letter-spacing:-.02em}
     .hero p{margin:0; font-size:clamp(1rem, 2.2vw, 1.25rem); color:var(--muted)}
@@ -55,14 +58,13 @@
     .tagline{display:flex; gap:10px; flex-wrap:wrap; margin-top:16px}
     .chip{padding:8px 12px; border-radius:999px; border:1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.06); font-size:.9rem}
 
-    /* === FIX #2: MADE BUTTONS CLICKABLE BY GIVING THEM A HIGHER LAYER === */
     .actions{
         display:flex;
         gap:10px;
         margin-top:18px;
         flex-wrap:wrap;
-        position: relative; /* Add this */
-        z-index: 2; /* Add this to ensure it's above the border effect */
+        position: relative;
+        z-index: 2;
     }
     .subtle{color:var(--muted); font-size:.95rem}
 
@@ -89,7 +91,12 @@
     .countdown{display:flex; gap:16px; flex-wrap:wrap; align-items:center}
     .timebox{min-width:88px; text-align:center; padding:12px 10px; border-radius:14px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12)}
     .timebox b{font-size:1.4rem; display:block}
-    .timebox span{font-size:.8rem; color:var(--muted)}
+    
+    /* === COUNTDOWN TEXT SIZE INCREASED HERE === */
+    .timebox span{
+        font-size:.9rem;
+        color:var(--muted)
+    }
 
     .cta-banner{margin-top:18px; display:flex; gap:12px; flex-wrap:wrap}
 
@@ -202,7 +209,7 @@
         <div class="brand">
           <div class="logo" aria-hidden="true"><span>N</span></div>
           <b>Nexusly</b>
-          <span class="chip" style="margin-left:6px">Beta</span>
+          <span class="chip" style="margin-left:6px">Beta build (1.6)</span>
         </div>
         <div class="nav-actions">
           <a class="btn btn-ghost" href="#modes">Modes</a>
@@ -213,8 +220,8 @@
     </header>
     <main class="container">
       <section class="hero">
-        <h1 class="reveal">A Better Roblox Player — supercharged.</h1>
-        <p class="reveal" style="transition-delay:.05s">Nexusly brings extreme UI, quicker installs, analytics, streamer tools, and more — all optimized for speed, stability, and a smoother experience beyond simple cache clearing.</p><div class="hero-card reveal" style="transition-delay:.1s">
+        <h1 class="reveal">A Better Roblox/Studio  SuperCharged⚡️(version) </h1>
+        <p class="reveal" style="transition-delay:.05s">Nexusly brings extreme UI, quicker installs, analytics, streamer tools, and more — all optimized for speed, stability, and a smoother experience beyond simple cache clearing and modifying the client 1nd kt’s all in one.</p><div class="hero-card reveal" style="transition-delay:.1s">
       <div class="tagline">
         <span class="chip">⚡ Ping & FPS tweaks</span>
         <span class="chip">🧩 Faster model/plugin installs</span>
@@ -236,6 +243,7 @@
           <div class="pill">Marketplace Shortcuts</div>
           <div class="pill">DevEx Access</div>
           <div class="pill">Forum Hub</div>
+          <div class="pill">Rat Proof</div>
           <div class="pill">Custom Animations</div>
           <div class="pill">Crash Guard</div>
           <div class="pill">Latency Aid</div>
@@ -246,6 +254,7 @@
           <div class="pill">Marketplace Shortcuts</div>
           <div class="pill">DevEx Access</div>
           <div class="pill">Forum Hub</div>
+          <div class="pill">Rat Proof</div>
           <div class="pill">Custom Animations</div>
           <div class="pill">Crash Guard</div>
           <div class="pill">Latency Aid</div>
@@ -289,7 +298,7 @@
   <section id="release" class="grid-2 reveal">
     <div class="glass">
       <h2 style="margin-top:0">📅 Planned release</h2>
-      <p class="subtle">Target window: <b>September 7–9</b>. Join the Discord to be notified the minute builds go live.</p>
+      <p class="subtle">Target window: <b>September 12</b>. Join the Discord to be notified the minute builds go live.</p>
       <div class="countdown" id="countdown" aria-live="polite">
         <div class="timebox"><b id="d">--</b><span>Days</span></div>
         <div class="timebox"><b id="h">--</b><span>Hours</span></div>
@@ -298,7 +307,7 @@
       </div>
       <div class="cta-banner">
         <a class="btn btn-primary" target="_blank" rel="noopener" href="https://discord.gg/pKR2dME5JJ">Join the Discord</a>
-        <a id="show-patch-notes-btn" class="btn btn-ghost" href="#">Release patch notes</a>
+        <a id="show-patch-notes-btn" class="btn btn-ghost" href="#">! Update List !</a>
       </div>
     </div>
     <div class="glass">
@@ -309,6 +318,7 @@
         <li>Focus on <b>speed</b> and <b>stability</b> — not just cache clearing.</li>
         <li>Thoughtful UX with glowing, modern visuals.</li>
         <li>Frequent updates and transparent roadmap.</li>
+        <li>It’s not just an app but a step into the future.</li>
       </ul>
     </div>
   </section>
@@ -326,7 +336,7 @@
   <main class="patch-container">
     <section class="patch-logs">
       <div class="log-group">
-        <h3>Initial Development</h3>
+        <h3>Initial Development ( All of this was professionaly with a mobile device 🤪 )</h3>
         <ul>
           <li class="add">Started Project Nexusly</li>
           <li class="add">UI in development</li>
@@ -417,15 +427,17 @@
 </div>
 
 <footer class="footer reveal">
-  <p>© <span id="year"></span> Nexusly. All rights reserved. <br/>Nexusly is an independent project and is <b>not affiliated with or endorsed by Roblox Corporation</b>. Roblox is a trademark of Roblox Corporation.</p>
+  <p>© <span id="year"></span> Nexusly. All rights reserved. / Tous droits réservés. <br/>Nexusly is an independent project and is <b>not affiliated with or endorsed by Roblox Corporation</b>. Roblox is a trademark of Roblox Corporation. <br/><b>Huge thanks to some people that i know dearly, who supported me.</b>
 </footer>
 
 <script>
+    // Simple intersection observer for reveal animations
     const io = new IntersectionObserver((entries)=>{
       entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('in') })
     }, {threshold: .12});
     document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
+    // Tabs logic
     const tabs = document.querySelectorAll('.tab');
     const panels = {
       player: document.getElementById('panel-player'),
@@ -440,6 +452,7 @@
       history.replaceState(null, '', `#${key}`);
     }));
 
+    // Restore tab from hash
     const hash = location.hash.replace('#','');
     if(['player','developer','streamer'].includes(hash)){
       document.querySelector(`.tab[data-tab="${hash}"]`).click();
@@ -447,7 +460,8 @@
       document.querySelector('.tab[data-tab="player"]').dataset.active = 'true';
     }
 
-    const target = new Date('2025-09-03T00:00:00');
+    // Countdown
+    const target = new Date('2025-09-12T00:00:00');
     const els = { d: document.getElementById('d'), h: document.getElementById('h'), m: document.getElementById('m'), s: document.getElementById('s') };
     function tick(){
       const now = new Date();
@@ -458,13 +472,15 @@
       const s = Math.floor(diff / 1000);
       els.d.textContent = d; els.h.textContent = h.toString().padStart(2,'0'); els.m.textContent = m.toString().padStart(2,'0'); els.s.textContent = s.toString().padStart(2,'0');
     }
-    if (els.d) { 
+    if (els.d) { // Only run if countdown elements exist
         tick();
         setInterval(tick, 1000);
     }
 
+    // Year
     document.getElementById('year').textContent = new Date().getFullYear();
 
+    // === NEW SCRIPT FOR PAGE TOGGLING ===
     const mainContent = document.getElementById('main-content');
     const patchNotesPage = document.getElementById('patch-notes-page');
     const showPatchNotesBtn = document.getElementById('show-patch-notes-btn');
@@ -492,7 +508,8 @@
         e.preventDefault();
         showMainPage();
     });
-//before yall skids start skidding ts ain’t a.i gen or smthing i just fixed it over 21 times and it was messy and i only put one html file to keep things as easy as ts twin 👀
+    
+    // Make main nav links switch back to main content if on patch notes page
     mainNavLinks.forEach(link => {
       link.addEventListener('click', (e) => {
         if (patchNotesPage.style.display !== 'none') {
