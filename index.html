@@ -440,14 +440,13 @@
       history.replaceState(null, '', `#${key}`);
     }));
 
-    
     const hash = location.hash.replace('#','');
     if(['player','developer','streamer'].includes(hash)){
       document.querySelector(`.tab[data-tab="${hash}"]`).click();
     } else if (document.querySelector('.tab[data-tab="player"]')) {
       document.querySelector('.tab[data-tab="player"]').dataset.active = 'true';
     }
-  
+
     const target = new Date('2025-09-03T00:00:00');
     const els = { d: document.getElementById('d'), h: document.getElementById('h'), m: document.getElementById('m'), s: document.getElementById('s') };
     function tick(){
@@ -459,14 +458,13 @@
       const s = Math.floor(diff / 1000);
       els.d.textContent = d; els.h.textContent = h.toString().padStart(2,'0'); els.m.textContent = m.toString().padStart(2,'0'); els.s.textContent = s.toString().padStart(2,'0');
     }
-    if (els.d) {
+    if (els.d) { 
         tick();
         setInterval(tick, 1000);
     }
 
-    
     document.getElementById('year').textContent = new Date().getFullYear();
-  
+
     const mainContent = document.getElementById('main-content');
     const patchNotesPage = document.getElementById('patch-notes-page');
     const showPatchNotesBtn = document.getElementById('show-patch-notes-btn');
@@ -494,15 +492,16 @@
         e.preventDefault();
         showMainPage();
     });
-  //before yall skids start skidding ts ain’t a.i gen or smthing i just fixed it over 21 times and it was messy and i only put one html file to keep things as easy as ts twin 👀
+//before yall skids start skidding ts ain’t a.i gen or smthing i just fixed it over 21 times and it was messy and i only put one html file to keep things as easy as ts twin 👀
     mainNavLinks.forEach(link => {
-      link.addEventListener('click', (e) => 
-            e.preventDefault(); 
-            showMainPage()
+      link.addEventListener('click', (e) => {
+        if (patchNotesPage.style.display !== 'none') {
+            e.preventDefault();
+            showMainPage();
             setTimeout(() => {
                 const targetElement = document.querySelector(link.getAttribute('href'));
                 if (targetElement) {
-                    targetElement.scrollIntoView(); 
+                    targetElement.scrollIntoView();
                 }
             }, 50);
         }
