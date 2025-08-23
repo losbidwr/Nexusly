@@ -1,27 +1,26 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" /> 
-  <title> Nexusly </title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nexusly — A Better Roblox Player</title>
   <meta name="description" content="Nexusly: Faster, smoother, and more customizable Roblox experience with Player, Developer, and Streamer modes. Optimized for speed and stability." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='100'>⚡</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>⚡</text></svg>">
   <style>
-    :root{ 
+    :root{
       --bg: #0a0b10;
       --card: rgba(255,255,255,0.06);
       --muted: #aeb2c1;
-      --primary: #7c5cff; /* purple */
-      --accent: #00f0ff;  /* cyan */
+      --primary: #7c5cff; /* note if u see this u agreed to the license. */
+      --accent: #00f0ff;  
       --glow: 0 0 30px rgba(124,92,255,.45), 0 0 60px rgba(0,240,255,.3);
       --radius: 18px;
       --add: #4ade80;
       --remove: #f87171;
-    } /
+    }
     *{box-sizing:border-box}
     html{scroll-behavior: smooth;}
     html,body{height:100%}
@@ -47,7 +46,7 @@
 
     section[id] {
       scroll-margin-top: 80px;
-    } 
+    }
 
     .hero{position:relative; padding:72px 0 36px}
     .hero h1{font-size:clamp(2.2rem, 5vw, 4rem); line-height:1.05; margin:0 0 14px; font-weight:900; letter-spacing:-.02em}
@@ -66,7 +65,7 @@
         flex-wrap:wrap;
         position: relative;
         z-index: 2;
-    } /
+    }
     .subtle{color:var(--muted); font-size:.95rem}
 
     .marquee{margin-top:24px; overflow:hidden; border:1px solid rgba(255,255,255,.1); border-radius:14px; background:rgba(255,255,255,.04)}
@@ -76,7 +75,7 @@
 
     .tabs{margin-top:42px; display:flex; gap:10px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:14px; padding:6px}
     .tab{flex:1; padding:12px 14px; text-align:center; border-radius:10px; cursor:pointer; font-weight:700; letter-spacing:.2px; color:#000000}
-    .tab[data-active="true"]{background:linear-gradient(145deg, rgba(124,92,255,.3), rgba(0,240,255,.25)); color:white; box-shadow: var(--glow)} 
+    .tab[data-active="true"]{background:linear-gradient(145deg, rgba(124,92,255,.3), rgba(0,240,255,.25)); color:white; box-shadow: var(--glow)}
 
     .panel{display:none; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:16px; margin-top:18px}
     .panel.active{display:grid}
@@ -91,9 +90,8 @@
 
     .countdown{display:flex; gap:16px; flex-wrap:wrap; align-items:center}
     .timebox{min-width:88px; text-align:center; padding:12px 10px; border-radius:14px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12)}
-    .timebox b{font-size:1.4rem; display:block}
-    
-    /* === COUNTDOWN TEXT SIZE INCREASED HERE === */
+    /* === COUNTDOWN NUMBER SIZE INCREASED HERE === */
+    .timebox b{font-size:2.4rem; display:block}
     .timebox span{
         font-size:.9rem;
         color:var(--muted)
@@ -143,7 +141,7 @@
       color: white;
       text-decoration: none;
       border-radius: 12px;
-      transition: background .2s ease; 
+      transition: background .2s ease;
     }
     .patch-nav .back-link:hover {
       background: rgba(255,255,255,.08);
@@ -155,7 +153,7 @@
     }
     .patch-logs {
       padding: 32px 0;
-    } 
+    }
     .patch-container{width:min(960px, 92%); margin-inline:auto}
     .log-group {
       background: var(--card);
@@ -181,7 +179,7 @@
       position: relative;
       margin-bottom: 10px;
       line-height: 1.5;
-    } 
+    }
     .log-group li::before {
       position: absolute;
       left: 0;
@@ -194,7 +192,7 @@
     .log-group li.remove::before {
       content: "-";
       color: var(--remove);
-    } 
+    }
     .log-group p.note {
       color: var(--muted);
       margin-top: 16px;
@@ -325,6 +323,7 @@
   </section>
  </main>
 </div>
+
 <div id="patch-notes-page" style="display: none;">
     <header class="patch-nav">
     <div class="patch-container patch-nav-inner">
@@ -431,11 +430,13 @@
 </footer>
 
 <script>
+    // Simple intersection observer for reveal animations
     const io = new IntersectionObserver((entries)=>{
       entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('in') })
     }, {threshold: .12});
     document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
+    // Tabs logic
     const tabs = document.querySelectorAll('.tab');
     const panels = {
       player: document.getElementById('panel-player'),
@@ -450,7 +451,7 @@
       history.replaceState(null, '', `#${key}`);
     }));
 
-    //⚠️ By just touching or modifying or even viewing it, you agreed to the license/copyright ⚠️
+    // Restore tab from hash
     const hash = location.hash.replace('#','');
     if(['player','developer','streamer'].includes(hash)){
       document.querySelector(`.tab[data-tab="${hash}"]`).click();
@@ -458,25 +459,27 @@
       document.querySelector('.tab[data-tab="player"]').dataset.active = 'true';
     }
 
-//⚠️ By just touching or modifying or even viewing it, you agreed to the license/copyright ⚠️
+    // Countdown
     const target = new Date('2025-09-12T00:00:00');
-    const els = { d: document.getElementById('d'), h: document.getElementById('h'), m: document.getElementById('m'), s: document.getElementById('s')};
+    const els = { d: document.getElementById('d'), h: document.getElementById('h'), m: document.getElementById('m'), s: document.getElementById('s') };
     function tick(){
       const now = new Date();
       let diff = Math.max(0, target - now);
       const d = Math.floor(diff / (1000*60*60*24)); diff -= d*24*60*60*1000;
       const h = Math.floor(diff / (1000*60*60)); diff -= h*60*60*1000;
       const m = Math.floor(diff / (1000*60)); diff -= m*60*1000;
-      const s = Math.floor(diff / 1000); 
-      
+      const s = Math.floor(diff / 1000);
       els.d.textContent = d; els.h.textContent = h.toString().padStart(2,'0'); els.m.textContent = m.toString().padStart(2,'0'); els.s.textContent = s.toString().padStart(2,'0');
     }
-    if (els.d) { 
+    if (els.d) { // Only run if countdown elements exist
         tick();
         setInterval(tick, 1000);
     }
+
+    // Year
     document.getElementById('year').textContent = new Date().getFullYear();
-  
+
+    // === NEW SCRIPT FOR PAGE TOGGLING ===
     const mainContent = document.getElementById('main-content');
     const patchNotesPage = document.getElementById('patch-notes-page');
     const showPatchNotesBtn = document.getElementById('show-patch-notes-btn');
@@ -505,11 +508,7 @@
         showMainPage();
     });
     
-   // ⚠️ The notes for scripts are just to help people in hard parts ( beginners) so they can practice html *FOR PERSONAL USAGE* ⚠️ 
-                                       // You dirty little skidder, even so what are u doing 😑🤨   
-     // here’s a seret code when the app releases, don’t leak and MAKE SURE UR THE FIRST stinky skidder to redeem it: THESKID67              
-                 // in order to redeem the code ( when the app releases ) you will need to dm me personally.
-     
+    // Make main nav links switch back to main content
     mainNavLinks.forEach(link => {
       link.addEventListener('click', (e) => {
         if (patchNotesPage.style.display !== 'none') {
@@ -521,8 +520,8 @@
                     targetElement.scrollIntoView();
                 }
             }, 50);
-        }                  
-      });                  
+        }     // the notes i put on complex scripts are for people who want’s to practice by modifying script FOR PERSONAL USAGE ONLY!
+      });      // dm me : Skid67, for a secret reward when app releases.
     });
   </script>
 </body>
